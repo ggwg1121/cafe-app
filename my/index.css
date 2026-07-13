@@ -1,0 +1,31 @@
+.container-narrow {
+  max-width: 480px;
+}
+
+.profile-card {
+  margin-bottom: var(--space-lg);
+}
+
+.profile-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.my-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.my-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}

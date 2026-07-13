@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>리뷰 관리 - 카페 온담 관리자</title>
+  <link rel="stylesheet" href="../../css/base.css" />
+  <link rel="stylesheet" href="./list.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a href="../index.html" class="navbar-brand"><svg class="brand-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#3a2416" stroke="#c9a15a" stroke-width="1.2"/><path d="M17.5 12.5c-1.2 1.6 1 2.2-0.3 4M22 12.5c-1.2 1.6 1 2.2-0.3 4M26.5 12.5c-1.2 1.6 1 2.2-0.3 4" fill="none" stroke="#c9a15a" stroke-width="1.3" stroke-linecap="round"/><rect x="15" y="20" width="15" height="10" rx="2" fill="none" stroke="#faf3ea" stroke-width="2"/><path d="M30 22h2.2a2.6 2.6 0 0 1 0 5.2H30" fill="none" stroke="#faf3ea" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="33" x2="31" y2="33" stroke="#faf3ea" stroke-width="2" stroke-linecap="round"/></svg> 카페 온담 관리자</a>
+    <nav class="navbar-links">
+      <a href="../index.html">대시보드</a>
+      <a href="../menus/list.html">메뉴</a>
+      <a href="../orders/list.html">주문</a>
+      <a href="../inventory/list.html">재고</a>
+      <a href="./list.html" class="active">리뷰</a>
+      <button id="logout-btn" class="btn btn-secondary">로그아웃</button>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1>리뷰 관리</h1>
+        <span id="review-summary" class="text-muted"></span>
+      </div>
+
+      <div class="review-filter">
+        <input type="search" id="search-input" placeholder="메뉴명, 작성자, 내용으로 검색" />
+        <select id="rating-select">
+          <option value="">전체 평점</option>
+          <option value="5">⭐5점</option>
+          <option value="4">⭐4점</option>
+          <option value="3">⭐3점</option>
+          <option value="2">⭐2점</option>
+          <option value="1">⭐1점</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>메뉴명</th>
+              <th>작성자</th>
+              <th>평점</th>
+              <th>내용</th>
+              <th>작성일</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="review-tbody"></tbody>
+        </table>
+      </div>
+
+      <p id="empty-state" class="state-message hidden">조건에 맞는 리뷰가 없습니다.</p>
+    </div>
+  </main>
+
+  <script src="../../js/data.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/auth.js"></script>
+  <script src="./list.js"></script>
+</body>
+</html>

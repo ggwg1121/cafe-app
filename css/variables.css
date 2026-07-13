@@ -1,0 +1,68 @@
+:root {
+  /* Color - Brand (warm brown/cream) */
+  --color-primary: #8b5e3c;
+  --color-primary-dark: #6b4626;
+  --color-primary-light: #b5896380;
+  --color-accent: #d98e4a;
+
+  /* Color - Surface */
+  --color-bg: #faf6f1;
+  --color-surface: #ffffff;
+  --color-surface-glass: rgba(255, 255, 255, 0.6);
+  --color-border: #e8ded2;
+
+  /* Color - Text */
+  --color-text: #3a2b1e;
+  --color-text-muted: #8a7768;
+  --color-text-on-primary: #ffffff;
+
+  /* Color - Status */
+  --color-success: #4a9b6e;
+  --color-danger: #c9524b;
+  --color-warning: #d9a441;
+
+  /* Typography */
+  --font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(58, 43, 30, 0.06);
+  --shadow-md: 0 4px 16px rgba(58, 43, 30, 0.1);
+  --shadow-lg: 0 12px 32px rgba(58, 43, 30, 0.16);
+
+  /* Glass morphism */
+  --glass-blur: 12px;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+
+  /* Layout */
+  --container-max: 1080px;
+  --header-height: 64px;
+  --bottom-nav-height: 56px;
+
+  /* Breakpoint reference (used in media queries as literal values) */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+
+  /* Z-index */
+  --z-header: 100;
+  --z-modal: 1000;
+  --z-toast: 2000;
+}

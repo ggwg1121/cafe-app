@@ -1,0 +1,103 @@
+(function () {
+  if (!requireAuth()) return;
+
+  qs("#logout-btn").addEventListener("click", () => {
+    logout();
+    window.location.href = "../index.html";
+  });
+
+  const user = getCurrentUser();
+  const listEl = qs("#review-list");
+  const emptyState = qs("#empty-state");
+
+  function menuName(menuId) {
+    const menu = getMenus().find((m) => m.id === menuId);
+    return menu ? menu.name : "삭제된 메뉴";
+  }
+
+  function render() {
+    const reviews = getReviews().filter((r) => r.userId === user.id);
+
+    if (reviews.length === 0) {
+      listEl.innerHTML = "";
+      emptyState.classList.remove("hidden");
+      return;
+    }
+
+    emptyState.classList.add("hidden");
+
+    listEl.innerHTML = reviews
+      .map(
+        (review) => `
+        <div class="my-review-item card" data-review-id="${review.id}">
+          <div class="my-review-item-header">
+            <span class="my-review-menu">${escapeHtml(menuName(review.menuId))}</span>
+            <span class="my-review-date">${formatDate(review.date)}</span>
+          </div>
+          <div class="review-view">
+            <div>${"⭐".repeat(review.rating)}</div>
+            <p>${escapeHtml(review.comment)}</p>
+            <div class="my-review-actions">
+              <button class="btn btn-secondary" data-edit="${review.id}">수정</button>
+              <button class="btn btn-danger" data-delete="${review.id}">삭제</button>
+            </div>
+          </div>
+        </div>
+      `
+      )
+      .join("");
+
+    qsa("[data-edit]", listEl).forEach((btn) => {
+      btn.addEventListener("click", () => startEdit(btn.dataset.edit));
+    });
+
+    qsa("[data-delete]", listEl).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!confirm("이 리뷰를 삭제할까요?")) return;
+        saveReviews(getReviews().filter((r) => r.id !== btn.dataset.delete));
+        render();
+      });
+    });
+  }
+
+  function startEdit(reviewId) {
+    const review = getReviews().find((r) => r.id === reviewId);
+    const item = listEl.querySelector(`[data-review-id="${reviewId}"] .review-view`);
+
+    item.innerHTML = `
+      <form class="my-review-edit-form" data-edit-form="${reviewId}">
+        <div class="field">
+          <label>평점</label>
+          <select name="rating">
+            ${[5, 4, 3, 2, 1]
+              .map(
+                (n) =>
+                  `<option value="${n}" ${n === review.rating ? "selected" : ""}>${"⭐".repeat(n)} (${n}점)</option>`
+              )
+              .join("")}
+          </select>
+        </div>
+        <div class="field">
+          <label>리뷰 내용</label>
+          <textarea name="comment" rows="3">${escapeHtml(review.comment)}</textarea>
+        </div>
+        <div class="my-review-actions">
+          <button type="button" class="btn btn-secondary" data-cancel>취소</button>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </div>
+      </form>
+    `;
+
+    item.querySelector("[data-cancel]").addEventListener("click", render);
+    item.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const rating = Number(e.target.rating.value);
+      const comment = e.target.comment.value.trim();
+      saveReviews(getReviews().map((r) => (r.id === reviewId ? { ...r, rating, comment } : r)));
+      showToast("리뷰가 수정되었습니다.");
+      render();
+    });
+  }
+
+  render();
+})();

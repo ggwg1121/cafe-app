@@ -1,0 +1,36 @@
+.menu-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+.menu-detail-image {
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.menu-detail-info h1 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-sm);
+}
+
+.menu-detail-price {
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+}
+
+.menu-detail-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .menu-detail {
+    grid-template-columns: 320px 1fr;
+  }
+}

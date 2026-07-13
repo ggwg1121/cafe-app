@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>메뉴 상세 - 카페 온담</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="./detail.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a href="../index.html" class="navbar-brand"><svg class="brand-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#3a2416" stroke="#c9a15a" stroke-width="1.2"/><path d="M17.5 12.5c-1.2 1.6 1 2.2-0.3 4M22 12.5c-1.2 1.6 1 2.2-0.3 4M26.5 12.5c-1.2 1.6 1 2.2-0.3 4" fill="none" stroke="#c9a15a" stroke-width="1.3" stroke-linecap="round"/><rect x="15" y="20" width="15" height="10" rx="2" fill="none" stroke="#faf3ea" stroke-width="2"/><path d="M30 22h2.2a2.6 2.6 0 0 1 0 5.2H30" fill="none" stroke="#faf3ea" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="33" x2="31" y2="33" stroke="#faf3ea" stroke-width="2" stroke-linecap="round"/></svg> 카페 온담</a>
+    <nav class="navbar-links">
+      <a href="./list.html" class="active">메뉴</a>
+      <a href="../basket/list.html" class="nav-auth-only hidden">장바구니 <span id="cart-count" class="badge badge-muted hidden">0</span></a>
+      <a href="../orders/list.html" class="nav-auth-only hidden">주문내역</a>
+      <a href="../my/index.html" class="nav-auth-only hidden">마이페이지</a>
+      <a href="../auth/login.html" id="login-link">로그인</a>
+      <button id="logout-btn" class="btn btn-secondary hidden">로그아웃</button>
+    </nav>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div id="detail-root"></div>
+      <p id="not-found" class="state-message hidden">메뉴를 찾을 수 없습니다.</p>
+
+      <section id="review-section" class="review-section hidden">
+        <h2 class="review-heading">리뷰 <span id="review-summary" class="text-muted"></span></h2>
+
+        <div id="review-list" class="review-list"></div>
+        <p id="review-empty" class="state-message hidden">아직 작성된 리뷰가 없습니다.</p>
+
+        <form id="review-form" class="card review-form hidden">
+          <div class="field">
+            <label for="rating">평점</label>
+            <select id="rating">
+              <option value="5">⭐⭐⭐⭐⭐ (5점)</option>
+              <option value="4">⭐⭐⭐⭐ (4점)</option>
+              <option value="3">⭐⭐⭐ (3점)</option>
+              <option value="2">⭐⭐ (2점)</option>
+              <option value="1">⭐ (1점)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="comment">리뷰 내용</label>
+            <textarea id="comment" rows="3" placeholder="메뉴에 대한 솔직한 후기를 남겨주세요." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">리뷰 등록</button>
+        </form>
+
+        <p id="review-login-prompt" class="state-message hidden">
+          <a href="../auth/login.html" class="auth-link">로그인</a> 후 리뷰를 작성할 수 있어요.
+        </p>
+        <p id="review-already" class="text-muted hidden">이미 이 메뉴에 리뷰를 남기셨습니다.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="./detail.js"></script>
+</body>
+</html>

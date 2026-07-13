@@ -7,7 +7,7 @@
 | 로그인/회원가입       | 회원/비회원 구분, 로그인해야 장바구니·주문·리뷰 작성 가능 |
 | 결제 시뮬레이션       | 장바구니 → 결제 정보 입력 → 결제 완료 (실제 결제 X, UX만) |
 | 리뷰/평점             | 메뉴 상세에서 리뷰 목록 확인 + 평점, 마이페이지에서 내 리뷰 관리 |
-| 매장/재고 관리 (카페 망) | 관리자가 여러 매장을 등록하고 매장별 재고를 관리          |
+| 재고 관리             | 관리자가 단일 매장 기준으로 메뉴별 재고를 관리            |
 
 ## 📁 폴더 구조 (완전 코로케이션)
 
@@ -74,7 +74,7 @@ cafe-app/
 │       ├── login.html                # 관리자 로그인
 │       ├── login.css
 │       ├── login.js
-│       ├── index.html                # 대시보드 (매장별 통계 요약)
+│       ├── index.html                # 대시보드 (재고 현황 요약)
 │       ├── index.css
 │       ├── index.js
 │       │
@@ -100,22 +100,8 @@ cafe-app/
 │       │   ├── detail.css
 │       │   └── detail.js
 │       │
-│       ├── stores/                   # 매장 관리 (카페 망)
-│       │   ├── list.html             # 매장 목록
-│       │   ├── list.css
-│       │   ├── list.js
-│       │   ├── detail.html           # 매장 상세
-│       │   ├── detail.css
-│       │   ├── detail.js
-│       │   ├── create.html           # 매장 추가
-│       │   ├── create.css
-│       │   ├── create.js
-│       │   ├── edit.html             # 매장 수정
-│       │   ├── edit.css
-│       │   └── edit.js
-│       │
-│       ├── inventory/                # 재고 관리 (매장별)
-│       │   ├── list.html             # 매장 선택 + 재고 목록
+│       ├── inventory/                # 재고 관리 (단일 매장)
+│       │   ├── list.html             # 메뉴별 재고 목록
 │       │   ├── list.css
 │       │   ├── list.js
 │       │   ├── detail.html           # 품목별 재고 상세/조정
@@ -132,7 +118,7 @@ cafe-app/
 │   │   ├── variables.css             # CSS 변수 (전역)
 │   │   └── base.css                  # 리셋 + 공통 베이스 스타일
 │   └── js/
-│       ├── data.js                   # 메뉴/카테고리/매장 목업 데이터
+│       ├── data.js                   # 메뉴/카테고리/재고/매장정보 목업 데이터
 │       ├── utils.js                  # 공통 유틸리티 (포맷, DOM 헬퍼 등)
 │       ├── auth.js                   # 로그인 상태 관리 (localStorage 세션)
 │       ├── cart.js                   # 장바구니 상태 관리 (localStorage)
@@ -145,7 +131,7 @@ cafe-app/
 | --------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | **비회원**      | `/`, `/menus/`, `/auth/`                                              | 메인, 메뉴 조회, 로그인/회원가입                                          |
 | **회원(고객)**  | `/`, `/menus/`, `/basket/`, `/payment/`, `/orders/`, `/my/`           | 메뉴 조회+리뷰, 장바구니, 결제, 주문 내역, 마이페이지, 내 리뷰 관리       |
-| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/stores/`, `/admin/inventory/`, `/admin/reviews/` | 대시보드, 메뉴 CRUD, 주문 관리, 매장 관리, 매장별 재고 관리, 리뷰 관리 |
+| **관리자/사장** | `/admin/`, `/admin/menus/`, `/admin/orders/`, `/admin/inventory/`, `/admin/reviews/` | 대시보드, 메뉴 CRUD, 주문 관리, 재고 관리, 리뷰 관리 |
 
 ## 🔐 인증/권한 흐름
 
@@ -174,64 +160,60 @@ cafe-app/
 
 ### 1단계: 공유 자원
 
-- [ ] `css/variables.css` — 전역 CSS 변수
-- [ ] `css/base.css` — 리셋, 공통 베이스 스타일
-- [ ] `js/data.js` — 메뉴/카테고리/매장 목업 데이터
-- [ ] `js/utils.js` — 공통 유틸리티 (포맷 등)
-- [ ] `js/auth.js` — 로그인 세션 관리 (회원/관리자 공용 유틸)
-- [ ] `js/cart.js` — 장바구니 상태 관리
-- [ ] `js/payment.js` — 결제 시뮬레이션 로직
+- [x] `css/variables.css` — 전역 CSS 변수
+- [x] `css/base.css` — 리셋, 공통 베이스 스타일
+- [x] `js/data.js` — 메뉴/카테고리/매장 목업 데이터
+- [x] `js/utils.js` — 공통 유틸리티 (포맷 등)
+- [x] `js/auth.js` — 로그인 세션 관리 (회원/관리자 공용 유틸)
+- [x] `js/cart.js` — 장바구니 상태 관리
+- [x] `js/payment.js` — 결제 시뮬레이션 로직
 
 ### 2단계: 고객 - 인증
 
-- [ ] `auth/login.html` / `.css` / `.js`
-- [ ] `auth/signup.html` / `.css` / `.js`
+- [x] `auth/login.html` / `.css` / `.js`
+- [x] `auth/signup.html` / `.css` / `.js`
 
 ### 3단계: 관리자 - 메뉴 관리 시스템
 
-- [ ] `admin/menus/list.html` / `.css` / `.js`
-- [ ] `admin/menus/detail.html` / `.css` / `.js`
-- [ ] `admin/menus/create.html` / `.css` / `.js`
-- [ ] `admin/menus/edit.html` / `.css` / `.js`
+- [x] `admin/menus/list.html` / `.css` / `.js`
+- [x] `admin/menus/detail.html` / `.css` / `.js`
+- [x] `admin/menus/create.html` / `.css` / `.js`
+- [x] `admin/menus/edit.html` / `.css` / `.js`
 
 ### 4단계: 고객 - 메뉴 조회 + 리뷰 시스템
 
-- [ ] `menus/list.html` / `.css` / `.js`
-- [ ] `menus/detail.html` / `.css` / `.js` — 메뉴 정보 + 리뷰 목록/작성 폼
+- [x] `menus/list.html` / `.css` / `.js`
+- [x] `menus/detail.html` / `.css` / `.js` — 메뉴 정보 + 리뷰 목록/작성 폼
 
 ### 5단계: 고객 - 장바구니 & 결제 시스템
 
-- [ ] `basket/list.html` / `.css` / `.js`
-- [ ] `payment/checkout.html` / `.css` / `.js`
-- [ ] `payment/complete.html` / `.css` / `.js`
+- [x] `basket/list.html` / `.css` / `.js`
+- [x] `payment/checkout.html` / `.css` / `.js`
+- [x] `payment/complete.html` / `.css` / `.js`
 
 ### 6단계: 고객 - 주문 관리 시스템
 
-- [ ] `orders/list.html` / `.css` / `.js`
-- [ ] `orders/detail.html` / `.css` / `.js`
+- [x] `orders/list.html` / `.css` / `.js`
+- [x] `orders/detail.html` / `.css` / `.js`
 
 ### 7단계: 고객 - 메인 & 마이페이지
 
-- [ ] `index.html` / `.css` / `.js`
-- [ ] `my/index.html` / `.css` / `.js`
-- [ ] `my/reviews.html` / `.css` / `.js`
+- [x] `index.html` / `.css` / `.js`
+- [x] `my/index.html` / `.css` / `.js`
+- [x] `my/reviews.html` / `.css` / `.js`
 
 ### 8단계: 관리자 - 대시보드 & 주문 관리
 
-- [ ] `admin/login.html` / `.css` / `.js`
-- [ ] `admin/index.html` / `.css` / `.js`
-- [ ] `admin/orders/list.html` / `.css` / `.js`
-- [ ] `admin/orders/detail.html` / `.css` / `.js`
+- [x] `admin/login.html` / `.css` / `.js`
+- [x] `admin/index.html` / `.css` / `.js`
+- [x] `admin/orders/list.html` / `.css` / `.js`
+- [x] `admin/orders/detail.html` / `.css` / `.js`
 
-### 9단계: 관리자 - 매장/재고 관리 (카페 망)
+### 9단계: 관리자 - 재고 관리 (단일 매장)
 
-- [ ] `admin/stores/list.html` / `.css` / `.js`
-- [ ] `admin/stores/detail.html` / `.css` / `.js`
-- [ ] `admin/stores/create.html` / `.css` / `.js`
-- [ ] `admin/stores/edit.html` / `.css` / `.js`
-- [ ] `admin/inventory/list.html` / `.css` / `.js`
-- [ ] `admin/inventory/detail.html` / `.css` / `.js`
+- [x] `admin/inventory/list.html` / `.css` / `.js`
+- [x] `admin/inventory/detail.html` / `.css` / `.js`
 
 ### 10단계: 관리자 - 리뷰 관리
 
-- [ ] `admin/reviews/list.html` / `.css` / `.js`
+- [x] `admin/reviews/list.html` / `.css` / `.js`
