@@ -6,24 +6,24 @@
 | 파일        | 원본 제목 (Wikimedia Commons File)                                       |
 | ----------- | ------------------------------------------------------------------------ |
 | m01.jpg     | Morning black American coffee.jpg                                        |
-| m02.jpg     | Caffe Latte cup.jpg                                                      |
-| m03.jpg     | Cup of coffee with latte art 2016.jpg                                    |
+| m02.jpg     | Caffe latte (6064969604).jpg                                             |
+| m03.jpg     | Soy Vanilla Chai Latte at G.S.T. Bean.jpg                                |
 | m04.jpg     | Mug of Earl Grey tea, Cafe Express, York Way, London, England 01.jpg     |
 | m05.jpg     | A peach ice tea.jpg                                                      |
 | m06.jpg     | Македонски десерт тирамису (2).jpg                                       |
 | m07.jpg     | Cheesecake with slice cut out.jpg                                        |
 | m08.jpg     | Caffè Mocha by Phil.jpg                                                  |
-| m09.jpg     | A cup of cappuccino at Indooroopilly Shopping Centre.JPG                 |
+| m09.jpg     | Cappuccino with foam.jpg                                                 |
 | m10.jpg     | Flat white coffee with pretty feather pattern.jpg                        |
 | m11.jpg     | Chameleon Cold Brew Organic Vanilla Coffee - Glass Bottle.jpg            |
-| m12.jpg     | Espresso - Evan Swigart.jpg                                              |
+| m12.jpg     | A cup of Americano in Lano Coffee (Palembang, SS).jpg                    |
 | m13.jpg     | Gigi Coffee Hazelnut Praline Latte.jpg                                   |
 | m14.jpg     | Grapefruit Tea.jpg                                                       |
 | m15.jpg     | Glass of chamomile tea.jpg                                               |
-| m16.jpg     | Korean yuja tea.jpg                                                      |
-| m17.jpg     | A Cup of Milk Tea.jpg                                                    |
-| m18.jpg     | Croissant In Austria.jpg                                                 |
-| m19.jpg     | Almond Maple Scones.jpg                                                  |
+| m16.jpg     | Korean tea-Yujacha-03.jpg                                                |
+| m17.jpg     | Cup of Milk Tea.jpg                                                      |
+| m18.jpg     | Croissant in Madrid (Photography by David Adam Kess).jpg                |
+| m19.jpg     | Buttermilk-Scones-batch.jpg                                              |
 | m20.jpg     | Chocolate brownie 4.jpg                                                  |
 | m21.jpg     | Colorful Macarons (Unsplash).jpg                                         |
 | m22.jpg     | Carrot cake - Milfey Patisserie 2026-04-04.jpg                           |
