@@ -78,6 +78,7 @@
   const reviewSummary = qs("#review-summary");
   const reviewForm = qs("#review-form");
   const reviewLoginPrompt = qs("#review-login-prompt");
+  const reviewNotPurchased = qs("#review-not-purchased");
   const reviewAlready = qs("#review-already");
 
   async function renderReviews() {
@@ -109,17 +110,18 @@
     }
 
     const currentUser = getCurrentUser();
+    reviewForm.classList.add("hidden");
+    reviewLoginPrompt.classList.add("hidden");
+    reviewNotPurchased.classList.add("hidden");
+    reviewAlready.classList.add("hidden");
+
     if (!currentUser) {
-      reviewForm.classList.add("hidden");
-      reviewAlready.classList.add("hidden");
       reviewLoginPrompt.classList.remove("hidden");
     } else if (reviews.some((r) => r.userId === currentUser.id)) {
-      reviewForm.classList.add("hidden");
-      reviewLoginPrompt.classList.add("hidden");
       reviewAlready.classList.remove("hidden");
+    } else if (!(await hasPurchasedMenu(menu.id))) {
+      reviewNotPurchased.classList.remove("hidden");
     } else {
-      reviewLoginPrompt.classList.add("hidden");
-      reviewAlready.classList.add("hidden");
       reviewForm.classList.remove("hidden");
     }
   }

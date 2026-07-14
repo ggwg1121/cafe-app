@@ -56,6 +56,15 @@ async function getOrders() {
   return data.map(mapOrderRow);
 }
 
+// 로그인한 사용자가 해당 메뉴를 주문한 적이 있는지 (리뷰 작성 가능 여부 판단용, 화면 안내 목적)
+// 실제 작성 가능 여부는 reviews 테이블의 INSERT RLS 정책이 서버에서 강제한다.
+async function hasPurchasedMenu(menuId) {
+  const user = getCurrentUser();
+  if (!user) return false;
+  const orders = await getOrders();
+  return orders.some((order) => order.items.some((item) => item.menuId === menuId));
+}
+
 async function getOrderById(orderId) {
   const { data, error } = await sb.from("orders").select(ORDER_SELECT).eq("id", orderId).maybeSingle();
   if (error || !data) return null;
@@ -138,3 +147,4 @@ window.getOrders = getOrders;
 window.getOrderById = getOrderById;
 window.processPayment = processPayment;
 window.getPointsHistory = getPointsHistory;
+window.hasPurchasedMenu = hasPurchasedMenu;
