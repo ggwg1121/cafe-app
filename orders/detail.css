@@ -29,6 +29,14 @@
   margin-bottom: var(--space-md);
 }
 
+.order-detail-points-earned {
+  text-align: right;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+}
+
 .order-detail-meta {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);

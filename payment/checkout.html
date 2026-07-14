@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -27,6 +27,28 @@
 
       <div id="order-summary" class="order-summary card"></div>
 
+      <div id="points-section" class="card points-section">
+        <div class="points-section-header">
+          <span>보유 포인트</span>
+          <span id="points-balance">0P</span>
+        </div>
+        <div class="field points-use-field">
+          <label for="points-input">사용할 포인트</label>
+          <div class="points-use-row">
+            <input type="number" id="points-input" min="0" step="1" value="0" />
+            <button type="button" id="points-max-btn" class="btn btn-secondary">전액사용</button>
+          </div>
+        </div>
+        <div class="points-summary-row">
+          <span>포인트 사용</span>
+          <span id="points-used-display">-0원</span>
+        </div>
+        <div class="points-summary-row points-final-total">
+          <span>최종 결제 금액</span>
+          <span id="final-total">0원</span>
+        </div>
+      </div>
+
       <form id="payment-form" class="card payment-form" novalidate>
         <div class="field">
           <label for="cardNumber">카드 번호</label>
@@ -52,6 +74,8 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabaseClient.js"></script>
   <script src="../js/data.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>

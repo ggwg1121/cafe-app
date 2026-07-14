@@ -1,8 +1,8 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
@@ -14,21 +14,18 @@
     categorySelect.appendChild(opt);
   });
 
-  qs("#menu-form").addEventListener("submit", (e) => {
+  qs("#menu-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const menu = {
-      id: generateId("m"),
-      name: qs("#name").value.trim(),
+    const name = qs("#name").value.trim();
+    await createMenu({
+      name,
       categoryId: categorySelect.value,
       price: Number(qs("#price").value),
-      image: qs("#image").value.trim() || placeholderImage(qs("#name").value.trim() || "메뉴"),
+      image: qs("#image").value.trim() || placeholderImage(name || "메뉴"),
       description: qs("#description").value.trim(),
       isSoldOut: qs("#isSoldOut").checked,
-    };
-
-    saveMenus([...getMenus(), menu]);
-    saveInventory([...getInventory(), { menuId: menu.id, stock: 0 }]);
+    });
     showToast("메뉴가 추가되었습니다.");
     window.location.href = "./list.html";
   });

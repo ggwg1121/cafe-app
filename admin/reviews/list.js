@@ -1,8 +1,8 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
@@ -12,16 +12,18 @@
   const searchInput = qs("#search-input");
   const ratingSelect = qs("#rating-select");
 
+  const menus = await getMenus();
+
   function menuName(menuId) {
-    const menu = getMenus().find((m) => m.id === menuId);
+    const menu = menus.find((m) => m.id === menuId);
     return menu ? menu.name : "삭제된 메뉴";
   }
 
-  function render() {
+  async function render() {
     const keyword = searchInput.value.trim().toLowerCase();
     const rating = ratingSelect.value;
 
-    const allReviews = getReviews();
+    const allReviews = await getReviews();
     if (allReviews.length > 0) {
       const avg = (allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length).toFixed(1);
       summaryEl.textContent = `전체 ${allReviews.length}건 · 평균 ⭐ ${avg}`;
@@ -63,9 +65,9 @@
       .join("");
 
     qsa("[data-delete]", tbody).forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         if (!confirm("이 리뷰를 삭제할까요?")) return;
-        saveReviews(getReviews().filter((r) => r.id !== btn.dataset.delete));
+        await deleteReview(btn.dataset.delete);
         render();
       });
     });

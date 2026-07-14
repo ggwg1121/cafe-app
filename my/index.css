@@ -17,6 +17,24 @@
   font-size: var(--font-size-sm);
 }
 
+.points-card {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.points-card-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.points-card-value {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
 .my-links {
   display: flex;
   flex-direction: column;

@@ -1,13 +1,13 @@
-(function () {
-  if (!requireAuth()) return;
+(async function () {
+  if (!(await requireAuth())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    logout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await logout();
     window.location.href = "../index.html";
   });
 
   const id = getQueryParam("id");
-  const order = getOrderById(id);
+  const order = await getOrderById(id);
   const root = qs("#detail-root");
 
   if (!order) {
@@ -36,10 +36,22 @@
           .join("")}
       </div>
 
+      ${
+        order.pointsUsed > 0
+          ? `<div class="order-detail-item"><span>포인트 사용</span><span>-${formatPrice(order.pointsUsed)}</span></div>`
+          : ""
+      }
+
       <div class="order-detail-total">
-        <span>총 결제 금액</span>
-        <span>${formatPrice(order.total)}</span>
+        <span>최종 결제 금액</span>
+        <span>${formatPrice(order.total - order.pointsUsed)}</span>
       </div>
+
+      ${
+        order.pointsEarned > 0
+          ? `<p class="order-detail-points-earned">${order.pointsEarned.toLocaleString("ko-KR")}P 적립됨</p>`
+          : ""
+      }
 
       <div class="order-detail-meta">
         <p>주문번호: ${escapeHtml(order.id)}</p>

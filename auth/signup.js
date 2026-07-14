@@ -1,4 +1,5 @@
-(function () {
+(async function () {
+  await initAuth();
   if (getCurrentUser()) {
     window.location.href = "../index.html";
     return;
@@ -7,7 +8,7 @@
   const form = qs("#signup-form");
   const errorEl = qs("#signup-error");
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     errorEl.classList.add("hidden");
 
@@ -22,14 +23,24 @@
       return;
     }
 
-    const result = signup({ email, password, name });
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+
+    const result = await signup({ email, password, name });
     if (!result.ok) {
       errorEl.textContent = result.error;
       errorEl.classList.remove("hidden");
+      submitBtn.disabled = false;
       return;
     }
 
-    showToast("가입이 완료되었습니다. 로그인해주세요.");
-    window.location.href = "./login.html";
+    if (result.needsEmailConfirmation) {
+      showToast("가입 확인 메일을 보냈습니다. 메일함을 확인해주세요.");
+      window.location.href = "./login.html";
+      return;
+    }
+
+    showToast(`${result.user.name}님, 환영합니다!`);
+    window.location.href = "../index.html";
   });
 })();

@@ -1,22 +1,24 @@
-(function () {
-  if (!requireAuth()) return;
+(async function () {
+  if (!(await requireAuth())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    logout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await logout();
     window.location.href = "../index.html";
   });
 
   const user = getCurrentUser();
+  const menus = await getMenus();
   const listEl = qs("#review-list");
   const emptyState = qs("#empty-state");
 
   function menuName(menuId) {
-    const menu = getMenus().find((m) => m.id === menuId);
+    const menu = menus.find((m) => m.id === menuId);
     return menu ? menu.name : "삭제된 메뉴";
   }
 
-  function render() {
-    const reviews = getReviews().filter((r) => r.userId === user.id);
+  async function render() {
+    const allReviews = await getReviews();
+    const reviews = allReviews.filter((r) => r.userId === user.id);
 
     if (reviews.length === 0) {
       listEl.innerHTML = "";
@@ -48,24 +50,24 @@
       .join("");
 
     qsa("[data-edit]", listEl).forEach((btn) => {
-      btn.addEventListener("click", () => startEdit(btn.dataset.edit));
+      const review = reviews.find((r) => r.id === btn.dataset.edit);
+      btn.addEventListener("click", () => startEdit(review));
     });
 
     qsa("[data-delete]", listEl).forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         if (!confirm("이 리뷰를 삭제할까요?")) return;
-        saveReviews(getReviews().filter((r) => r.id !== btn.dataset.delete));
+        await deleteReview(btn.dataset.delete);
         render();
       });
     });
   }
 
-  function startEdit(reviewId) {
-    const review = getReviews().find((r) => r.id === reviewId);
-    const item = listEl.querySelector(`[data-review-id="${reviewId}"] .review-view`);
+  function startEdit(review) {
+    const item = listEl.querySelector(`[data-review-id="${review.id}"] .review-view`);
 
     item.innerHTML = `
-      <form class="my-review-edit-form" data-edit-form="${reviewId}">
+      <form class="my-review-edit-form" data-edit-form="${review.id}">
         <div class="field">
           <label>평점</label>
           <select name="rating">
@@ -89,11 +91,11 @@
     `;
 
     item.querySelector("[data-cancel]").addEventListener("click", render);
-    item.querySelector("form").addEventListener("submit", (e) => {
+    item.querySelector("form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const rating = Number(e.target.rating.value);
       const comment = e.target.comment.value.trim();
-      saveReviews(getReviews().map((r) => (r.id === reviewId ? { ...r, rating, comment } : r)));
+      await updateReview(review.id, { rating, comment });
       showToast("리뷰가 수정되었습니다.");
       render();
     });

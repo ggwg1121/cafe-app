@@ -1,14 +1,14 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
   const menuId = getQueryParam("menuId");
-  const menu = getMenus().find((m) => m.id === menuId);
-  const inventoryRow = getInventory().find((inv) => inv.menuId === menuId);
+  const menus = await getMenus();
+  const menu = menus.find((m) => m.id === menuId);
   const root = qs("#detail-root");
 
   if (!menu) {
@@ -18,7 +18,6 @@
   }
 
   const category = window.CATEGORIES.find((c) => c.id === menu.categoryId);
-  const currentStock = inventoryRow ? inventoryRow.stock : 0;
 
   root.innerHTML = `
     <div class="card inventory-detail">
@@ -28,7 +27,7 @@
 
       <div class="inventory-detail-input">
         <label for="stock-input">재고 수량</label>
-        <input type="number" id="stock-input" min="0" value="${currentStock}" />
+        <input type="number" id="stock-input" min="0" value="${menu.stock}" />
       </div>
 
       <div class="inventory-detail-actions">
@@ -38,16 +37,9 @@
     </div>
   `;
 
-  qs("#save-btn").addEventListener("click", () => {
+  qs("#save-btn").addEventListener("click", async () => {
     const newStock = Math.max(0, Number(qs("#stock-input").value) || 0);
-    const inventory = getInventory();
-    const existing = inventory.find((inv) => inv.menuId === menuId);
-    if (existing) {
-      existing.stock = newStock;
-    } else {
-      inventory.push({ menuId, stock: newStock });
-    }
-    saveInventory(inventory);
+    await updateMenuStock(menuId, newStock);
     showToast("재고가 저장되었습니다.");
     window.location.href = "./list.html";
   });

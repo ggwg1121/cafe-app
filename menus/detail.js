@@ -1,25 +1,27 @@
-(function () {
+(async function () {
+  await initAuth();
   const user = getCurrentUser();
   if (user) {
     qs("#login-link").classList.add("hidden");
     qsa(".nav-auth-only").forEach((el) => el.classList.remove("hidden"));
     const logoutBtn = qs("#logout-btn");
     logoutBtn.classList.remove("hidden");
-    logoutBtn.addEventListener("click", () => {
-      logout();
+    logoutBtn.addEventListener("click", async () => {
+      await logout();
       window.location.reload();
     });
   }
 
   const cartCountEl = qs("#cart-count");
-  const cartCount = user ? getCartCount() : 0;
+  const cartCount = user ? await getCartCount() : 0;
   if (cartCount > 0) {
     cartCountEl.textContent = cartCount;
     cartCountEl.classList.remove("hidden");
   }
 
   const id = getQueryParam("id");
-  const menu = getMenus().find((m) => m.id === id);
+  const menus = await getMenus();
+  const menu = menus.find((m) => m.id === id);
   const root = qs("#detail-root");
 
   if (!menu) {
@@ -55,14 +57,14 @@
   `;
 
   if (!menu.isSoldOut) {
-    qs("#add-to-cart-btn").addEventListener("click", () => {
+    qs("#add-to-cart-btn").addEventListener("click", async () => {
       if (!getCurrentUser()) {
         const redirect = encodeURIComponent(window.location.pathname + window.location.search);
         window.location.href = `../auth/login.html?redirect=${redirect}`;
         return;
       }
       const qty = Math.max(1, Number(qs("#qty").value) || 1);
-      addItem(menu.id, qty);
+      await addItem(menu.id, qty);
       showToast("장바구니에 담았습니다.");
     });
   }
@@ -78,8 +80,9 @@
   const reviewLoginPrompt = qs("#review-login-prompt");
   const reviewAlready = qs("#review-already");
 
-  function renderReviews() {
-    const reviews = getReviews().filter((r) => r.menuId === menu.id);
+  async function renderReviews() {
+    const allReviews = await getReviews();
+    const reviews = allReviews.filter((r) => r.menuId === menu.id);
 
     if (reviews.length === 0) {
       reviewSummary.textContent = "";
@@ -121,25 +124,20 @@
     }
   }
 
-  reviewForm.addEventListener("submit", (e) => {
+  reviewForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const currentUser = getCurrentUser();
     if (!currentUser) return;
 
-    const review = {
-      id: generateId("r"),
+    await createReview({
       menuId: menu.id,
       userId: currentUser.id,
-      userName: currentUser.name,
       rating: Number(qs("#rating").value),
       comment: qs("#comment").value.trim(),
-      date: new Date().toISOString().slice(0, 10),
-    };
-
-    saveReviews([...getReviews(), review]);
+    });
     showToast("리뷰가 등록되었습니다.");
-    renderReviews();
+    await renderReviews();
   });
 
-  renderReviews();
+  await renderReviews();
 })();

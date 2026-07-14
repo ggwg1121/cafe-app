@@ -1,8 +1,8 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
@@ -23,11 +23,13 @@
     return category ? category.name : "-";
   }
 
+  let allMenus = await getMenus();
+
   function render() {
     const keyword = searchInput.value.trim().toLowerCase();
     const categoryId = categorySelect.value;
 
-    const menus = getMenus().filter((menu) => {
+    const menus = allMenus.filter((menu) => {
       const matchesKeyword = !keyword || menu.name.toLowerCase().includes(keyword);
       const matchesCategory = !categoryId || menu.categoryId === categoryId;
       return matchesKeyword && matchesCategory;
@@ -62,11 +64,11 @@
     emptyState.classList.toggle("hidden", menus.length > 0);
 
     qsa("[data-delete]", tbody).forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         if (!confirm("이 메뉴를 삭제할까요?")) return;
         const id = btn.dataset.delete;
-        saveMenus(getMenus().filter((menu) => menu.id !== id));
-        saveInventory(getInventory().filter((inv) => inv.menuId !== id));
+        await deleteMenu(id);
+        allMenus = allMenus.filter((menu) => menu.id !== id);
         render();
       });
     });

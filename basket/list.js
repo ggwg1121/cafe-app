@@ -1,8 +1,8 @@
-(function () {
-  if (!requireAuth()) return;
+(async function () {
+  if (!(await requireAuth())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    logout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await logout();
     window.location.href = "../index.html";
   });
 
@@ -11,20 +11,20 @@
   const emptyState = qs("#empty-state");
   const cartCountEl = qs("#cart-count");
 
-  function updateCartBadge() {
-    const count = getCartCount();
+  async function updateCartBadge() {
+    const count = await getCartCount();
     cartCountEl.textContent = count;
     cartCountEl.classList.toggle("hidden", count === 0);
   }
 
-  function render() {
-    const items = getCartDetails();
+  async function render() {
+    const items = await getCartDetails();
 
     if (items.length === 0) {
       listEl.innerHTML = "";
       summaryEl.classList.add("hidden");
       emptyState.classList.remove("hidden");
-      updateCartBadge();
+      await updateCartBadge();
       return;
     }
 
@@ -52,32 +52,32 @@
       )
       .join("");
 
-    qs("#basket-total").textContent = formatPrice(getCartTotal());
+    qs("#basket-total").textContent = formatPrice(await getCartTotal());
 
     qsa("[data-increase]", listEl).forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         const item = items.find((i) => i.menu.id === btn.dataset.increase);
-        updateQty(btn.dataset.increase, item.qty + 1);
+        await updateQty(btn.dataset.increase, item.qty + 1);
         render();
       });
     });
 
     qsa("[data-decrease]", listEl).forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         const item = items.find((i) => i.menu.id === btn.dataset.decrease);
-        updateQty(btn.dataset.decrease, item.qty - 1);
+        await updateQty(btn.dataset.decrease, item.qty - 1);
         render();
       });
     });
 
     qsa("[data-remove]", listEl).forEach((btn) => {
-      btn.addEventListener("click", () => {
-        removeItem(btn.dataset.remove);
+      btn.addEventListener("click", async () => {
+        await removeItem(btn.dataset.remove);
         render();
       });
     });
 
-    updateCartBadge();
+    await updateCartBadge();
   }
 
   render();

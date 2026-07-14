@@ -1,13 +1,13 @@
-(function () {
-  if (!requireAuth()) return;
+(async function () {
+  if (!(await requireAuth())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    logout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await logout();
     window.location.href = "../index.html";
   });
 
   const orderId = getQueryParam("orderId");
-  const order = getOrderById(orderId);
+  const order = await getOrderById(orderId);
   const root = qs("#complete-root");
 
   if (!order) {
@@ -33,10 +33,20 @@
         `
           )
           .join("")}
+        ${
+          order.pointsUsed > 0
+            ? `<div class="complete-summary-item"><span>포인트 사용</span><span>-${formatPrice(order.pointsUsed)}</span></div>`
+            : ""
+        }
         <div class="complete-summary-total">
-          <span>총 결제 금액</span>
-          <span>${formatPrice(order.total)}</span>
+          <span>최종 결제 금액</span>
+          <span>${formatPrice(order.total - order.pointsUsed)}</span>
         </div>
+        ${
+          order.pointsEarned > 0
+            ? `<p class="complete-points-earned">이번 주문으로 ${order.pointsEarned.toLocaleString("ko-KR")}P가 적립되었습니다.</p>`
+            : ""
+        }
       </div>
 
       <div class="complete-actions">

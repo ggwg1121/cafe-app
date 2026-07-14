@@ -1,0 +1,62 @@
+.container-narrow {
+  max-width: 560px;
+}
+
+.points-balance-card {
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.points-balance-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.points-balance-value {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.points-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.points-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.points-item-reason {
+  font-weight: 600;
+}
+
+.points-item-date {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.points-item-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.points-item-amount.positive {
+  color: var(--color-success);
+}
+
+.points-item-amount.negative {
+  color: var(--color-text-muted);
+}

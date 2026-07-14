@@ -33,6 +33,13 @@
   color: var(--color-primary);
 }
 
+.order-card-points {
+  margin-top: var(--space-xs);
+  text-align: right;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
 #empty-state {
   gap: var(--space-md);
 }

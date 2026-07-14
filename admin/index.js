@@ -1,20 +1,20 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "./login.html";
   });
 
-  const orders = getAllOrders();
+  const orders = await getAllOrders();
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-  const inventory = getInventory();
-  const soldOutCount = inventory.filter((inv) => inv.stock === 0).length;
+  const menus = await getMenus();
+  const soldOutCount = menus.filter((menu) => menu.stock === 0).length;
 
   const stats = [
     { label: "총 매출", value: formatPrice(totalRevenue) },
     { label: "총 주문 수", value: `${orders.length}건` },
-    { label: "등록 메뉴 수", value: `${getMenus().length}개` },
+    { label: "등록 메뉴 수", value: `${menus.length}개` },
     { label: "품절 메뉴 수", value: `${soldOutCount}개` },
   ];
 
@@ -50,11 +50,9 @@
       .join("");
   }
 
-  const menus = getMenus();
-  const lowStockItems = inventory
-    .filter((inv) => inv.stock <= 5)
-    .map((inv) => ({ menu: menus.find((m) => m.id === inv.menuId), stock: inv.stock }))
-    .filter((item) => item.menu)
+  const lowStockItems = menus
+    .filter((menu) => menu.stock <= 5)
+    .map((menu) => ({ menu, stock: menu.stock }))
     .sort((a, b) => a.stock - b.stock);
 
   const statGrid = qs("#inventory-stat-grid");

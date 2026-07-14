@@ -1,13 +1,14 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
   const id = getQueryParam("id");
-  const menu = getMenus().find((m) => m.id === id);
+  const menus = await getMenus();
+  const menu = menus.find((m) => m.id === id);
   const root = qs("#detail-root");
 
   if (!menu) {
@@ -39,10 +40,9 @@
     </div>
   `;
 
-  qs("#delete-btn").addEventListener("click", () => {
+  qs("#delete-btn").addEventListener("click", async () => {
     if (!confirm("이 메뉴를 삭제할까요?")) return;
-    saveMenus(getMenus().filter((m) => m.id !== id));
-    saveInventory(getInventory().filter((inv) => inv.menuId !== id));
+    await deleteMenu(id);
     window.location.href = "./list.html";
   });
 })();

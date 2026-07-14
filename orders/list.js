@@ -1,13 +1,13 @@
-(function () {
-  if (!requireAuth()) return;
+(async function () {
+  if (!(await requireAuth())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    logout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await logout();
     window.location.href = "../index.html";
   });
 
   const cartCountEl = qs("#cart-count");
-  const cartCount = getCartCount();
+  const cartCount = await getCartCount();
   if (cartCount > 0) {
     cartCountEl.textContent = cartCount;
     cartCountEl.classList.remove("hidden");
@@ -16,7 +16,7 @@
   const listEl = qs("#order-list");
   const emptyState = qs("#empty-state");
 
-  const orders = getOrders();
+  const orders = await getOrders();
 
   if (orders.length === 0) {
     emptyState.classList.remove("hidden");
@@ -39,6 +39,11 @@
             <span class="text-muted">주문번호 ${escapeHtml(order.id)}</span>
             <span class="order-card-total">${formatPrice(order.total)}</span>
           </div>
+          ${
+            order.pointsEarned > 0
+              ? `<p class="order-card-points">${order.pointsEarned.toLocaleString("ko-KR")}P 적립</p>`
+              : ""
+          }
         </a>
       `;
       })

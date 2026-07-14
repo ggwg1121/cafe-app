@@ -1,22 +1,26 @@
-(function () {
+(async function () {
+  await initAuth();
   const user = getCurrentUser();
   if (user) {
     qs("#login-link").classList.add("hidden");
     qsa(".nav-auth-only").forEach((el) => el.classList.remove("hidden"));
     const logoutBtn = qs("#logout-btn");
     logoutBtn.classList.remove("hidden");
-    logoutBtn.addEventListener("click", () => {
-      logout();
+    logoutBtn.addEventListener("click", async () => {
+      await logout();
       window.location.reload();
     });
   }
 
   const cartCountEl = qs("#cart-count");
-  const count = user ? getCartCount() : 0;
+  const count = user ? await getCartCount() : 0;
   if (count > 0) {
     cartCountEl.textContent = count;
     cartCountEl.classList.remove("hidden");
   }
+
+  const menus = await getMenus();
+  const reviews = await getReviews();
 
   const grid = qs("#menu-grid");
   const emptyState = qs("#empty-state");
@@ -50,24 +54,24 @@
   }
 
   function averageRating(menuId) {
-    const reviews = getReviews().filter((r) => r.menuId === menuId);
-    if (reviews.length === 0) return null;
-    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-    return { avg: avg.toFixed(1), count: reviews.length };
+    const menuReviews = reviews.filter((r) => r.menuId === menuId);
+    if (menuReviews.length === 0) return null;
+    const avg = menuReviews.reduce((sum, r) => sum + r.rating, 0) / menuReviews.length;
+    return { avg: avg.toFixed(1), count: menuReviews.length };
   }
 
   function renderGrid() {
     const keyword = searchInput.value.trim().toLowerCase();
 
-    const menus = getMenus().filter((menu) => {
+    const filteredMenus = menus.filter((menu) => {
       const matchesKeyword = !keyword || menu.name.toLowerCase().includes(keyword);
       const matchesCategory = !activeCategory || menu.categoryId === activeCategory;
       return matchesKeyword && matchesCategory;
     });
 
-    const totalPages = Math.max(1, Math.ceil(menus.length / PAGE_SIZE));
+    const totalPages = Math.max(1, Math.ceil(filteredMenus.length / PAGE_SIZE));
     currentPage = Math.min(currentPage, totalPages);
-    const pageMenus = menus.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    const pageMenus = filteredMenus.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
     grid.innerHTML = pageMenus
       .map((menu) => {
@@ -88,7 +92,7 @@
       })
       .join("");
 
-    emptyState.classList.toggle("hidden", menus.length > 0);
+    emptyState.classList.toggle("hidden", filteredMenus.length > 0);
     renderPagination(totalPages);
   }
 

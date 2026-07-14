@@ -1,13 +1,13 @@
-(function () {
-  if (!requireAdmin()) return;
+(async function () {
+  if (!(await requireAdmin())) return;
 
-  qs("#logout-btn").addEventListener("click", () => {
-    adminLogout();
+  qs("#logout-btn").addEventListener("click", async () => {
+    await adminLogout();
     window.location.href = "../login.html";
   });
 
   const id = getQueryParam("id");
-  const order = getOrderById(id);
+  const order = await getOrderById(id);
   const root = qs("#detail-root");
 
   if (!order) {
@@ -47,22 +47,8 @@
         <p>고객: ${escapeHtml(order.userName)} (${escapeHtml(order.userEmail)})</p>
         <p>결제수단: ${escapeHtml(order.payment.cardNumberMasked)} (${escapeHtml(order.payment.cardHolder)})</p>
       </div>
-
-      <div class="field order-detail-status-field">
-        <label for="status-select">주문 상태 변경</label>
-        <select id="status-select">
-          ${window.ORDER_STATUSES.map(
-            (status) => `<option value="${status}" ${status === order.status ? "selected" : ""}>${status}</option>`
-          ).join("")}
-        </select>
-      </div>
     </div>
 
     <a href="./list.html" class="btn btn-secondary btn-block order-detail-back">목록으로</a>
   `;
-
-  qs("#status-select").addEventListener("change", (e) => {
-    updateOrderStatus(order.id, e.target.value);
-    showToast("주문 상태가 변경되었습니다.");
-  });
 })();

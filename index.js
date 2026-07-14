@@ -1,30 +1,34 @@
-(function () {
+(async function () {
+  await initAuth();
   const user = getCurrentUser();
   if (user) {
     qs("#login-link").classList.add("hidden");
     qsa(".nav-auth-only").forEach((el) => el.classList.remove("hidden"));
     const logoutBtn = qs("#logout-btn");
     logoutBtn.classList.remove("hidden");
-    logoutBtn.addEventListener("click", () => {
-      logout();
+    logoutBtn.addEventListener("click", async () => {
+      await logout();
       window.location.reload();
     });
   }
 
   const cartCountEl = qs("#cart-count");
-  const cartCount = user ? getCartCount() : 0;
+  const cartCount = user ? await getCartCount() : 0;
   if (cartCount > 0) {
     cartCountEl.textContent = cartCount;
     cartCountEl.classList.remove("hidden");
   }
 
+  const menus = await getMenus();
+  const reviews = await getReviews();
+
   function averageRating(menuId) {
-    const reviews = getReviews().filter((r) => r.menuId === menuId);
-    if (reviews.length === 0) return 0;
-    return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    const menuReviews = reviews.filter((r) => r.menuId === menuId);
+    if (menuReviews.length === 0) return 0;
+    return menuReviews.reduce((sum, r) => sum + r.rating, 0) / menuReviews.length;
   }
 
-  const popularMenus = [...getMenus()]
+  const popularMenus = [...menus]
     .filter((menu) => !menu.isSoldOut)
     .sort((a, b) => averageRating(b.id) - averageRating(a.id))
     .slice(0, 4);

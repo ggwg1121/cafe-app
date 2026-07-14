@@ -23,6 +23,42 @@
   border-top: 1px solid var(--color-border);
 }
 
+.points-section {
+  margin-bottom: var(--space-md);
+}
+
+.points-section-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.points-use-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.points-use-row input {
+  flex: 1;
+}
+
+.points-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  padding: 6px 0;
+}
+
+.points-final-total {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
 .payment-notice {
   margin-top: var(--space-md);
   font-size: var(--font-size-xs);
