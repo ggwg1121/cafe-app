@@ -28,7 +28,14 @@
           .map(
             (item) => `
           <div class="order-detail-item">
-            <span>${escapeHtml(item.name)} x ${item.qty}</span>
+            <div class="order-detail-item-info">
+              <span>${escapeHtml(item.name)} x ${item.qty}</span>
+              ${
+                item.menuId
+                  ? `<a href="../menus/detail.html?id=${item.menuId}#review-section" class="btn btn-secondary order-detail-review-btn">리뷰 쓰기</a>`
+                  : ""
+              }
+            </div>
             <span>${formatPrice(item.price * item.qty)}</span>
           </div>
         `

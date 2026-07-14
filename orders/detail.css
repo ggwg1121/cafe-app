@@ -16,8 +16,20 @@
 .order-detail-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: var(--font-size-sm);
   padding: 6px 0;
+}
+
+.order-detail-item-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.order-detail-review-btn {
+  padding: 4px 12px;
+  font-size: var(--font-size-xs);
 }
 
 .order-detail-total {
