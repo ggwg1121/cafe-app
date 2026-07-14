@@ -50,12 +50,12 @@ function mapMenuRow(row) {
   };
 }
 
-function mapReviewRow(row) {
+function mapReviewRow(row, nameMap) {
   return {
     id: row.id,
     menuId: row.menu_id,
     userId: row.user_id,
-    userName: row.profiles?.name ?? "알 수 없음",
+    userName: nameMap?.get(row.user_id) ?? "알 수 없음",
     rating: row.rating,
     comment: row.comment,
     date: row.created_at.slice(0, 10),
@@ -102,15 +102,19 @@ async function deleteMenu(id) {
 }
 
 async function getReviews() {
-  const { data, error } = await sb
-    .from("reviews")
-    .select("*, profiles(name)")
-    .order("created_at", { ascending: false });
+  const { data, error } = await sb.from("reviews").select("*").order("created_at", { ascending: false });
   if (error) {
     console.error(error);
     return [];
   }
-  return data.map(mapReviewRow);
+
+  // 작성자 이름은 profiles가 아니라 공개 뷰(public_profiles)에서 가져온다.
+  // profiles는 본인 것만 조회 가능한 RLS가 걸려있어, 남이 쓴 리뷰의 작성자 이름을 가져올 수 없기 때문.
+  const userIds = [...new Set(data.map((row) => row.user_id))];
+  const { data: profiles } = await sb.from("public_profiles").select("id, name").in("id", userIds);
+  const nameMap = new Map((profiles || []).map((p) => [p.id, p.name]));
+
+  return data.map((row) => mapReviewRow(row, nameMap));
 }
 
 async function createReview({ menuId, userId, rating, comment }) {
